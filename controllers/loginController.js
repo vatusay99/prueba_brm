@@ -1,8 +1,9 @@
 import { check, validationResult } from 'express-validator';
+import bcrypt, { genSalt } from 'bcrypt';
 
 import Usuario  from "../models/usuarios.js";
 import { generarId } from "../helpers/tokens.js";
-import { emailRegistro } from "../helpers/email.js";
+import { emailRegistro, emailOlvideContraseña } from "../helpers/email.js";
 import { where } from 'sequelize';
 
 const formularioLogin = ( req , res ) =>{
@@ -30,17 +31,9 @@ const registrar = async (req, res)=>{
 				.withMessage('El nombre es requerido')
 				.run(req);
 	await check('correo')
-				.notEmpty()
+				.isEmail()
 				.withMessage('El campo correo es requerido')
 				.run(req);
-	await check('password')
-				.isLength({min: 8})
-				.withMessage('El campo password es requerido y debe tener minimo 8 caracteres alfanumericos')
-				.run(req);
-	// await check('repetir_pass')
-	// 			.equals('password')
-	// 			.withMessage('los passwords no son iguales')
-	// 			.run(req);
 
 	let resultado = validationResult(req);
 
@@ -130,10 +123,111 @@ const confirmarCorreo = async (req, res)=>{
 
 }
 
+const resetPassword = async (req, res)=>{
+	// Validaciones
+	await check('correo').isEmail().withMessage('El campo correo es requerido').run(req);
+
+	let resultado = validationResult(req);
+
+	if(!resultado.isEmpty())
+	{
+		return res.render('auth/olvidePass', {
+			pagina: "Recuperar contraseña",
+			msg: 'El campo correo no es un correo valido.',
+			errores: resultado.array(),
+		});
+	}
+
+	const { correo } = req.body
+
+	const usuario = await Usuario.findOne({where: {correo}});
+
+	if(!usuario)
+	{
+		return res.render('auth/olvidePass', {
+			pagina: "Recuperar contraseña",
+			errores: [{msg: 'El campo correo no pertenece a ningun usuario.'}],
+		});
+	}
+
+	// generar token y enviar Email
+	usuario.token = generarId();
+	await usuario.save();
+
+	emailOlvideContraseña({
+		correo: usuario.correo,
+		nombre: usuario.nombre,
+		token: usuario.token
+	});
+
+	return res.render('templates/mensajes', {
+		pagina: "Cambiar contraseña",
+		mensaje: 'se envio un correo con los pasos para el restablecimiento de tu contraseña',
+		msg: "Inicio de sesión"
+	});
+
+
+}
+
+const comprobarToken = async (req, res)=>{
+
+	const {token} = req.params;
+	const usuario = await Usuario.findOne({where:{token}});
+	if(!usuario)
+	{
+		return res.render("auth/confirmarCuenta",{
+			pagina: "Error al validar tu cuenta",
+			mensaje: "Upss!! Algo salio mal. no es posible restablecer tu contraseña, contacta con el administrador.",
+			error: true
+		});
+	}
+
+	return res.render("auth/reset-password",{
+		pagina: "Restablecer tu contraseña",
+	});
+
+
+}
+
+const nuevaContraseña = async (req, res)=>{
+	await check('password')
+				.isLength({min: 8})
+				.withMessage('El campo password es requerido y debe tener minimo 8 caracteres alfanumericos')
+				.run(req);
+
+	let resultado = validationResult(req);
+
+	if(!resultado.isEmpty())
+	{
+		console.log("resultado de errores: ",resultado);
+		return res.render('auth/reset-password', {
+			pagina: "Restablecer tu contraseña",
+			errores: resultado.array(),
+		});
+	}
+
+	const {token } = req.params;
+	const { password } = req.body;
+
+	const usuario = await Usuario.findOne({where:{token}});
+	const salt = await bcrypt.genSalt(10);
+	usuario.password = await bcrypt.hash(password, salt);
+	usuario.token = null;
+	await usuario.save();
+
+	return res.render('auth/confirmarCuenta', {
+		pagina: "Contraseña Restablecida",
+		mensaje: "Nueva contraseña guardada correctamente"
+	});
+}
+
 export {
 	formularioLogin,
 	formularioRegistro,
 	formularioOlvidePass,
 	registrar,
-	confirmarCorreo
+	confirmarCorreo,
+	resetPassword,
+	comprobarToken, 
+	nuevaContraseña
 }
