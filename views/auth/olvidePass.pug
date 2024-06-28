@@ -1,0 +1,17 @@
+extends ../layout/index
+
+block contenido
+	h1(class="text-center text-4xl mb-8 uppercase bg-gradient-to-t bg-clip-text text-transparent font-bold from-sky-500 from- via-purple-400 via-40% to-cyan-300 to-") #{pagina}
+	main
+		form(class="mx-auto max-w-md shadow-2xl p-3 w-auto rounded-lg bg-gradient-to-b from-cyan-500 from- via-sky-400 via- to-blue-800 to-")
+			div
+				label(class="block")
+					span(class="block text-lg text-gray-500") Correo
+					input(type="email" class="peer ... w-full rounded-lg p-2 border-none" placeholder="Correo personal ej: dnd@gmail.com")
+					p(class="mt-2 invisible peer-invalid:visible text-rose-400 text-sm") por favor validar que el correo este completo
+		
+			div
+				input(type="submit" value="Enviar Instrucciones" class="bg-blue-600 hover:bg-blue-800 uppercase py-2 px-4 mb-3 rounded inline-flex items-center text-yellow-200")
+
+			.flex.items-center.justify-between
+				a.text-yellow-200.text-xs(href="/auth/login") Ir a Inicio Sesión
