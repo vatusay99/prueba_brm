@@ -12,6 +12,62 @@ const formularioLogin = ( req , res ) =>{
 	});
 }
 
+const autenticar = async (req, res)=>{
+	
+	await check('correo')
+				.isEmail()
+				.withMessage('* El campo correo es requerido')
+				.run(req);
+	await check('pass')
+				.notEmpty()
+				.withMessage('* El campo password es requerido')
+				.run(req);
+	
+	let resultado = validationResult(req);
+
+	if(!resultado.isEmpty())
+	{
+		return res.render('auth/login', {
+			pagina: "Inicio de sisión",
+			errores: resultado.array(),
+		});
+	}
+
+	const { correo, pass } = req.body;
+
+	const usuario = await Usuario.findOne({where: {correo}});
+	if(!usuario)
+	{
+		return res.render('auth/login', {
+			pagina: "Inicio de sesión",
+			errores: [{msg: "El usuario no se encontro... valide e intente de nuevo."}]
+		});
+	}
+
+	if(!usuario.activo)
+	{
+		return res.render('auth/login', {
+			pagina: "Inicio de sesión",
+			errores: [{msg: "El usuario no se encuenta activo."}]
+		});	
+	}
+
+	// validar pass
+	if(!usuario.verificarPassword(pass))
+	{
+		return res.render('auth/login', {
+			pagina: "Inicio de sesión",
+			errores: [{msg: "El password no es correcto."}]
+		});	
+	}
+	
+	// autenticar al usuario
+
+
+
+
+}
+
 const formularioRegistro = ( req , res ) =>{
 	res.render('auth/registro', {
 		autenticado: false
@@ -223,6 +279,7 @@ const nuevaContraseña = async (req, res)=>{
 
 export {
 	formularioLogin,
+	autenticar,
 	formularioRegistro,
 	formularioOlvidePass,
 	registrar,
