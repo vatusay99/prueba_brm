@@ -2,7 +2,7 @@ import { check, validationResult } from 'express-validator';
 import bcrypt, { genSalt } from 'bcrypt';
 
 import Usuario  from "../models/usuarios.js";
-import { generarId } from "../helpers/tokens.js";
+import { GenerarJWT, generarId } from "../helpers/tokens.js";
 import { emailRegistro, emailOlvideContraseña } from "../helpers/email.js";
 import { where } from 'sequelize';
 
@@ -62,8 +62,13 @@ const autenticar = async (req, res)=>{
 	}
 	
 	// autenticar al usuario
+	const token = GenerarJWT(usuario.id);
 
+	// almacenar token en cookies
+	return res.cookie('_token', token, {
+		httpOnly: true,
 
+	}).redirect('/mis-propiedades');
 
 
 }

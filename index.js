@@ -3,13 +3,14 @@ import express from "express";
 import csrf from "csrf";
 import pkg from "cookie-parser";
 import loginRoutes from "./routes/loginRoutes.js";
+import propiedadesRoutes from "./routes/propiedadesRoutes.js";
 import db from "./config/db.js";
-const { cookieParser } = pkg;
+import cookieParser from 'cookie-parser';
 
 const app = express();
 app.use(express.urlencoded({extended: true}));
 
-// app.use( cookieParser());
+app.use( cookieParser());
 // app.use( csrf());
 
 // conexion a DB
@@ -27,6 +28,7 @@ app.set('views', './views');
 app.use(express.static('public'))
 
 app.use('/auth', loginRoutes);
+app.use('/', propiedadesRoutes);
 
 
 const port = 3000;
