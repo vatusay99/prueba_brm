@@ -1,8 +1,9 @@
 import express from "express";
-import { admin } from "../controllers/propiedadesController.js";
+import { admin, crear } from "../controllers/propiedadesController.js";
 
 const router = express.Router();
 
-router.get('/mis-propiedades', admin);
+router.get('/mis-productos', admin);
+router.get('/productos/crear', crear);
 
 export default router;

@@ -1,5 +1,18 @@
 const admin = (req, res) => {
-	res.send("Sesion Iniciada.");
+	res.render('propiedades/admin', {
+		pagina: 'Mis propiedades',
+		navegacion: true
+	})
 }
 
-export { admin }
+const crear = (req, res) => {
+	res.render('propiedades/crear', {
+		pagina: 'Crear producto',
+		navegacion: true
+	})
+}
+
+export { 
+	admin,
+	crear
+}
