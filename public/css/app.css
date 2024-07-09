@@ -706,6 +706,10 @@ video {
   max-width: 56rem;
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
 .items-center {
   align-items: center;
 }

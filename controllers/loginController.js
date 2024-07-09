@@ -28,7 +28,7 @@ const autenticar = async (req, res)=>{
 	if(!resultado.isEmpty())
 	{
 		return res.render('auth/login', {
-			pagina: "Inicio de sisión",
+			pagina: "Inicio de sesión",
 			errores: resultado.array(),
 		});
 	}

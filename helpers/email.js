@@ -10,7 +10,7 @@ const emailRegistro = async (datos)=>{
 		}
 	});
 
-	console.log(datos);
+	// console.log(datos); 
 	const { nombre, correo, token } = datos;
 	await transport.sendMail({
 		from:"brm_registro@gmail.com",
@@ -37,7 +37,6 @@ const emailOlvideContraseña = async (datos)=>{
 		}
 	});
 
-	console.log(datos);
 	const { nombre, correo, token } = datos;
 	await transport.sendMail({
 		from:"brm_registro@gmail.com",

@@ -3,39 +3,45 @@ extends ../layout/index
 block contenido
 	h1(class="text-center text-4xl mb-8 uppercase bg-gradient-to-t bg-clip-text text-transparent font-bold from-sky-500 from- via-purple-400 via-40% to-cyan-300 to-") #{pagina}
 
+	if errores
+			div(class="max-w-md mx-auto my-10")
+				each error in errores
+					p(class="bg-rose-400 text-white uppercase text-xs text-center p-2 mb-1 font-bold") #{error.msg}
+
 	div(class="bg-slate-200 shadow py-5 px-4 rounded mx-auto max-w-4xl md:px-10") 
-		form(action="#" method="" class="space-y-1")
+
+		form(actions="/productos/crear" method="POST" class="space-y-1")
 			h2(class="mb-1 text-center uppercase bg-gradient-to-t bg-clip-text text-transparent font-bold from-sky-500 from- via-purple-400 via-40% to-cyan-300 to-") formulario de creacion de producto 
 			p.text-gray-500 Completa los campos del formulario y da click en guardar para crear producto en Base de datos.
 			div.space-y-1
 				label(class="block" for="nombre_producto")
 					span(class="block text-lg text-gray-500") Nombre del producto
-				input(type="text" class="peer ... w-full rounded-lg p-2 border-none" placeholder="Nombre del producto" name="nombre_producto")
+				input(type="text" class="peer ... w-full rounded-lg p-2 border-none" placeholder="Nombre del producto" name="nombre_producto" value=datos.nombre_producto ? datos.nombre_producto : "")
 				p(class="mt-2 invisible peer-invalid:visible text-rose-400 text-sm") campo nombre del producto es requerido.
 			div(class="md:flex md:gap-3 md:space-y-0")
 				div(class="space-y-1 md:w-1/2")
 					label(class="block" for="numero_lote_producto")
 						span(class="block text-lg text-gray-500") Número de lote
-					input(type="text" class="peer ... w-full rounded-lg p-2 border-none" placeholder="Número de lote" name="numero_lote_producto")
+					input(type="text" class="peer ... w-full rounded-lg p-2 border-none" placeholder="Número de lote" name="numero_lote_producto" value= datos.numero_lote_producto ? datos.numero_lote_producto:"")
 					p(class="mt-2 invisible peer-invalid:visible text-rose-400 text-sm") campo Número de lote es requerido.
 				div(class="space-y-1 md:w-1/2")
 					label(class="block" for="precio_producto")
 						span(class="block text-lg text-gray-500") Precio
-					input(type="number" class="peer ... w-full rounded-lg p-2 border-none" placeholder="Precio del producto por unidad" name="precio_producto")
+					input(type="number" class="peer ... w-full rounded-lg p-2 border-none" placeholder="Precio del producto por unidad" min="1" name="precio_producto" value= datos.precio_producto ? datos.precio_producto:"")
 					p(class="mt-2 invisible peer-invalid:visible text-rose-400 text-sm") campo Precio del producto es requerido.
 			div(class="md:flex md:gap-3 md:space-y-0")
 				div(class="space-y-1 md:w-1/2")
 					label(class="block" for="cantidad_producto")
 						span(class="block text-lg text-gray-500") Cantidad disponible
-					input(type="number" class="peer ... w-full rounded-lg p-2 border-none" placeholder="0" name="cantidad_producto")
+					input(type="number" class="peer ... w-full rounded-lg p-2 border-none" placeholder="0" name="cantidad_producto" min="1" value= datos.cantidad_producto ? datos.cantidad_producto:"")
 					p(class="mt-2 invisible peer-invalid:visible text-rose-400 text-sm") campo Cantidad disponible es requerido.
 				
 				div(class="space-y-1 md:w-1/2")
 					label(class="block" for="fecha_ingreso")
 						span(class="block text-lg text-gray-500") Fecha de ingreso
-					input(type="date" class="peer ... w-full rounded-lg p-2 border-none" placeholder="Fecha de ingreso" name="fecha_ingreso")
+					input(type="date" class="peer ... w-full rounded-lg p-2 border-none" placeholder="Fecha de ingreso" name="fecha_ingreso" value= datos.fecha_ingreso ? datos.fecha_ingreso:"")
 					p(class="mt-2 invisible peer-invalid:visible text-rose-400 text-sm") campo Fecha de ingreso es requerido.
 				
 			div
-				input(type="submit" value="Guardar" class="bg-blue-600 hover:bg-blue-800 uppercase py-2 px-4 mb-3 rounded w-full text-yellow-200")
+				input(type="submit" value="Guardar" class="bg-blue-600 cursor-pointer hover:bg-blue-800 uppercase py-2 px-4 mb-3 rounded w-full text-yellow-200")
 	
