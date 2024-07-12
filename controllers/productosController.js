@@ -5,7 +5,8 @@ import { Producto, Compra, Usuario } from "../models/index.js";
 const admin = (req, res) => {
 	res.render('productos/admin', {
 		pagina: 'Mis propiedades',
-		navegacion: true
+		navegacion: true,
+		msg: ""
 	})
 }
 
@@ -28,34 +29,30 @@ const crearProducto = async(req, res) => {
 			datos: req.body
 		})
 	}
-	console.log('req.body', req.body);
-	return res.send('ok');
+	// console.log('req.body', req.body);
+	// return res.send('ok');
 	
 	const { nombre_producto,  numero_lote_producto, precio_producto, cantidad_producto, fecha_ingreso} = req.body;
 	try {
 		// almacenar usuario nuevo
-		const productoCreado = await Producto.create({
+		const productoCreado = await Producto.scope('ocultarID').create({
 			nombre_producto,
 			numero_lote_producto,
 			precio_producto,
 			cantidad_producto,
 			fecha_ingreso
 		});
+		console.log('productoCreado', productoCreado);
+
+		return res.render('productos/admin', {
+			pagina: 'Mis propiedades',
+			navegacion: true,
+			msg: "Producto creado correctamente."
+		})
 		
 	} catch (error) {
 		console.log('error_DB', error);
 	}
-
-	
-	
-
-	console.log('productoCreado', productoCreado);
-
-	// res.render('productos/crear', {
-	// 	pagina: 'Crear producto',
-	// 	navegacion: true,
-	// 	msg: {productoCreado}
-	// })
 }
 
 export { 

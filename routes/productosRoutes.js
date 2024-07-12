@@ -12,7 +12,8 @@ router.post(
 	body('nombre_producto').trim().notEmpty().withMessage('El nombre del producto es obliglatorio.'),
 	body('numero_lote_producto').trim().notEmpty().withMessage('El numero del producto es obliglatorio.'),
 	body('precio_producto').isNumeric().withMessage('El precio del producto es obliglatorio.'),
-	body('cantidad_producto').isNumeric().withMessage('La cantidad del producto es obliglatorio.')
+	body('cantidad_producto').isNumeric().withMessage('La cantidad del producto es obliglatorio.'),
+	body('fecha_ingreso').trim().notEmpty().withMessage('La fecha de ingreso es obliglatoria.')
 	,crearProducto
 );
 

@@ -32,6 +32,14 @@ const Producto = db.define('productos',{
 		allowNull: false,
 		default: now()
 	}
+},{
+	scopes: {
+		ocultarID: {
+			attributes:{
+				exclude: ['id','createdAt', 'updatedAt']
+			}
+		}
+	}
 });
 
 Producto.prototype.verificarNombre = function(nombre_producto){

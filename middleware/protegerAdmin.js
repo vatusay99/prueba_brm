@@ -5,7 +5,7 @@ import Usuario from "../models/usuarios.js";
 const validarRutaAdmin = async (req, res, next)=>{
 
 	//Verificar si hay un token
-	console.log("cookie: ", req.cookies._token);
+	// console.log("cookie: ", req.cookies._token);
 	const {_token} = req.cookies
 	if(!_token)
 	{
