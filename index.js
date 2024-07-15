@@ -3,6 +3,7 @@ import express from "express";
 import csrf from "csrf";
 import loginRoutes from "./routes/loginRoutes.js";
 import productosRoutes from "./routes/productosRoutes.js";
+import appRoutes from "./routes/appRouter.js";
 import db from "./config/db.js";
 import cookieParser from 'cookie-parser';
 
@@ -26,9 +27,9 @@ app.set('views', './views');
 
 app.use(express.static('public'))
 
+app.use('/', appRoutes);
 app.use('/auth', loginRoutes);
 app.use('/', productosRoutes);
-
 
 const port = 3000;
 

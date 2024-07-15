@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon ./index.js",
-    "css": "postcss public/css/tailwindcss.css -o public/css/app.css",
+    "css": "postcss public/css/tailwindcss.css -o public/css/app.css --watch",
     "js": "webpack ",
     "db:importar": "node ./seed/seeder.js -i",
     "db:delete": "node ./seed/seeder.js -e"
